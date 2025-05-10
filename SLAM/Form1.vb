@@ -382,6 +382,8 @@ Public Class Form1
             Throw New System.Exception("Steamapps folder is incorrect. Disable ""override folder detection"", or select a correct folder.")
         End If
 
+        Throw New System.Exception("GameCfgFolder is " + GameCfgFolder)
+
         'slam.cfg
         Using slam_cfg As StreamWriter = New StreamWriter(GameCfgFolder & "slam.cfg")
             slam_cfg.WriteLine("alias slam_listtracks ""exec slam_tracklist.cfg""")
