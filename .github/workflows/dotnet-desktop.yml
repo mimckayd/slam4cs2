@@ -1,0 +1,35 @@
+name: Build SLAM
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore NuGet packages
+      run: nuget restore SLAM.sln
+
+    - name: Build solution
+      run: msbuild SLAM.sln /p:Configuration=Release
+
+    - name: Find built executable
+      id: find_exe
+      run: |
+        $exe = Get-ChildItem -Path . -Recurse -Filter *.exe | Where-Object { $_.FullName -like "*\\bin\\Release\\*.exe" } | Select-Object -First 1
+        echo "exe_path=$($exe.FullName)" >> $env:GITHUB_OUTPUT
+
+    - name: Upload executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: SLAM-executable
+        path: ${{ steps.find_exe.outputs.exe_path }}
