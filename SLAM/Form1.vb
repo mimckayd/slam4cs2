@@ -36,7 +36,7 @@ Public Class Form1
         Dim cs2 As New SourceGame
         cs2.name = "Counter Strike 2"
         cs2.id = 730
-        cs2.directory = "common\Counter-Strike Global Offensive\"
+        cs2.directory = "common\Counter-Strike Global Offensive\game"
         cs2.ToCfg = "csgo\cfg\"
         cs2.libraryname = "cs2\"
         cs2.exename = "cs2"
