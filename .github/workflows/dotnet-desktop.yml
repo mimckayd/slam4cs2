@@ -24,9 +24,19 @@ jobs:
 
     - name: Find built executable
       id: find_exe
+      shell: pwsh
       run: |
-        $exe = Get-ChildItem -Path . -Recurse -Filter *.exe | Where-Object { $_.FullName -like "*\\bin\\Release\\*.exe" } | Select-Object -First 1
-        echo "Found EXE at $($exe.FullName)"
+        Write-Host "Searching for EXE files..."
+        $exes = Get-ChildItem -Path . -Recurse -Filter *.exe
+        $exes | ForEach-Object { Write-Host "Found: $($_.FullName)" }
+
+        $exe = $exes | Where-Object { $_.FullName -match '\\bin\\Release\\.*\.exe$' } | Select-Object -First 1
+
+        if (-not $exe) {
+          Write-Error "No Release .exe found"
+          exit 1
+        }
+
         echo "exe_path=$($exe.FullName)" >> $env:GITHUB_ENV
 
     - name: Upload executable
