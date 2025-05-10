@@ -26,10 +26,11 @@ jobs:
       id: find_exe
       run: |
         $exe = Get-ChildItem -Path . -Recurse -Filter *.exe | Where-Object { $_.FullName -like "*\\bin\\Release\\*.exe" } | Select-Object -First 1
-        echo "exe_path=$($exe.FullName)" >> $env:GITHUB_OUTPUT
+        echo "Found EXE at $($exe.FullName)"
+        echo "exe_path=$($exe.FullName)" >> $env:GITHUB_ENV
 
     - name: Upload executable
       uses: actions/upload-artifact@v4
       with:
         name: SLAM-executable
-        path: ${{ steps.find_exe.outputs.exe_path }}
+        path: ${{ env.exe_path }}
