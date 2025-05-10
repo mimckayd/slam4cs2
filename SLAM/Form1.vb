@@ -576,11 +576,7 @@ Public Class Form1
 
             If Not String.IsNullOrEmpty(SteamAppsPath) Then
                 CreateCfgFiles(Game, SteamAppsPath)
-            End If
-
-            Dim GameDirOther As String = Path.Combine(SteamappsPath, Game.directory)
-            Dim GameCfgFolder As String = Path.Combine(GameDirOther, Game.ToCfg)
-            Throw New System.Exception("GameCfgFolder is " + GameCfgFolder + "; exe dir is: " + GameDir)
+            End If            
 
         Catch ex As Exception
             LogError(ex)
@@ -588,6 +584,12 @@ Public Class Form1
             Return
         End Try
 
+        Using log As StreamWriter = New StreamWriter("debug.txt", True)
+            log.WriteLine("SteamappsPath: {0}", SteamappsPath)
+            log.WriteLine("Game.directory: {0}", Game.directory)
+            log.WriteLine("Game.ToCfg: {0}", Game.ToCfg)
+            log.WriteLine("Game.exename: {0}", Game.exename)
+        End Using
 
         PollRelayWorker.ReportProgress(WORKING) 'Report that SLAM is working.
 
