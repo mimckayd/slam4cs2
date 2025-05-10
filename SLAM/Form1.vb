@@ -382,8 +382,6 @@ Public Class Form1
             Throw New System.Exception("Steamapps folder is incorrect. Disable ""override folder detection"", or select a correct folder.")
         End If
 
-        Throw New System.Exception("GameCfgFolder is " + GameCfgFolder)
-
         'slam.cfg
         Using slam_cfg As StreamWriter = New StreamWriter(GameCfgFolder & "slam.cfg")
             slam_cfg.WriteLine("alias slam_listtracks ""exec slam_tracklist.cfg""")
@@ -579,6 +577,10 @@ Public Class Form1
             If Not String.IsNullOrEmpty(SteamAppsPath) Then
                 CreateCfgFiles(Game, SteamAppsPath)
             End If
+
+            Dim GameDirOther As String = Path.Combine(SteamappsPath, Game.directory)
+            Dim GameCfgFolder As String = Path.Combine(GameDirOther, Game.ToCfg)
+            Throw New System.Exception("GameCfgFolder is " + GameCfgFolder + "; exe dir is: " + GameDir)
 
         Catch ex As Exception
             LogError(ex)
